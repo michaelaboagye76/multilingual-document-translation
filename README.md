@@ -1,9 +1,10 @@
-# AWS Serverless Document Translation Pipeline
+
+# Multiliingual document translation 
 
 This project implements a **serverless multilingual translation pipeline** on AWS.
-It accepts **JSON documents** containing text blocks and language metadata, translates them into multiple target languages using **Amazon Translate**, and stores the translated results in S3.
+It accepts **JSON documents** containing text blocks and language metadata, translates them into multiple target languages using **Amazon Translate**, and stores the translated results in Amazon S3.
 
-The project is deployed using **Terraform / CloudFormation** for Infrastructure-as-Code.
+The project is deployed using **Terraform** for Infrastructure-as-Code (IaC).
 
 ---
 
@@ -17,13 +18,11 @@ The project is deployed using **Terraform / CloudFormation** for Infrastructure-
   * Upload input JSON files.
   * List available translated JSON results.
   * Download translations via presigned S3 URLs.
-* Infrastructure defined using **Terraform** or **CloudFormation**.
+* Infrastructure deployed using **Terraform**?.
 
 ---
 
 ## Example Input JSON
-
-Upload this file to the **input bucket** (via Flask app or S3 console):
 
 ```json
 {
@@ -37,11 +36,7 @@ Upload this file to the **input bucket** (via Flask app or S3 console):
 }
 ```
 
----
-
 ## Example Output JSON
-
-Lambda will generate this and store it in the **output bucket**:
 
 ```json
 {
@@ -68,44 +63,83 @@ Lambda will generate this and store it in the **output bucket**:
 
 ---
 
-## Architecture
+##  Architecture Diagram.
 
-1. **Flask App (EC2)** → Upload JSON → stored in **S3 Input Bucket**.
-2. **S3 Event** → triggers **Lambda**.
-3. **Lambda** → reads JSON, calls **Amazon Translate**, generates new JSON.
-4. **Lambda** → saves results to **S3 Output Bucket**.
-5. **Flask App** → Lists available translations + download links.
+![](doc/architecture-diagram.png)
+---
+
+##  Technologies Used
+
+* **AWS Lambda** – JSON processing + translation
+* **Amazon S3** – Input/output storage
+* **Amazon Translate** – Multilingual translation
+* **IAM** – Roles and security policies
+* **Flask (Python)** – Web UI for uploads/downloads
+* **Terraform** – Infrastructure as Code
+* **Boto3** – AWS SDK for Python
+
+--
+
+##  Deployment
+
+
+### **1. Deploy Infrastructure**
+Set the terminal to the project directory
+
+Directory structure
+```
+multiliingual-document-translation /
+├── terraform/
+│   └── 1-provider.tf
+│	└── 2-bucket.tf
+│	└── 3.lambda.tf
+│	└── outputs.tf
+│	└── variable.tf
+└── lambda/
+    └── lambda_function.py
+
+```
+
+
+
+#### Terraform
+
+```bash
+cd terraform
+terraform init
+terraform apply
+```
+
+### **2. Package Lambda Code**
+
+```bash
+cd lambda
+zip lambda.zip lambda_function.py
+aws s3 cp lambda.zip s3://<lambda-code-bucket>/
+```
 
 ---
 
-## Technologies Used
+##  Usage
 
-* **AWS Lambda** – JSON processing + translation.
-* **Amazon S3** – Input/output storage.
-* **Amazon Translate** – Multilingual translation.
-* **IAM** – Secure roles/policies.
-* **Flask (Python)** – Web UI for uploads/downloads.
-* **Terraform** – Infrastructure as Code.
-* **Boto3** – AWS SDK for Python (S3 + Translate).
-
----
-
-## Deployment Steps
-
-### **Using Terraform for IaC**
-
-1. Zip Lambda code automatically (`archive_file`).
-2. Run:
+1. Start the Flask app (if running on EC2, it auto-runs at startup):
 
    ```bash
-   terraform init
-   terraform apply
+   python app.py
    ```
+2. Open the UI → `http://<ec2-public-ip>:5000/`
+3. Upload a JSON file.
+4. Wait for translations to complete (Lambda triggers automatically).
+5. Download translated JSON files from the output list.
 
+---
 
-## Future Enhancements
+##  Future Enhancements
 
-* Add support for multiple input formats (CSV, TXT).
-* Add authentication for Flask UI (Cognito or IAM).
-* Store translation history in DynamoDB.
-* Add CI/CD pipeline (CodePipeline + CodeBuild).
+* Support additional input formats (CSV, TXT).
+*  Add user authentication via AWS Cognito.
+*  Store metadata and translation history in DynamoDB.
+*  Add CI/CD pipeline with CodePipeline.
+
+---
+
