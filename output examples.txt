@@ -1,0 +1,21 @@
+{
+  "source_lang": "en",
+  "translations": {
+    "fr": [
+      "Bonjour le monde",
+      "Ceci est AWS Translate",
+      "Lambda facilite le sans serveur"
+    ],
+    "es": [
+      "Hola mundo",
+      "Esto es AWS Translate",
+      "Lambda facilita el serverless"
+    ],
+    "de": [
+      "Hallo Welt",
+      "Dies ist AWS Translate",
+      "Lambda macht serverlos einfach"
+    ]
+  }
+}
+

@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Policy for Lambda to access S3 and AWS Translate
+
+Resources:
+  LambdaTranslatePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: lambda-translate-policy-cfn
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: "arn:aws:logs:*:*:*"
+
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource:
+              - !Sub arn:aws:s3:::doc-uploads-*/*
+              - !Sub arn:aws:s3:::doc-translated-*/*
+
+          - Effect: Allow
+            Action:
+              - translate:TranslateText
+            Resource: "*"
+
+Outputs:
+  PolicyArn:
+    Description: ARN of the IAM Managed Policy
+    Value: !Ref LambdaTranslatePolicy
