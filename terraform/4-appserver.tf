@@ -21,7 +21,7 @@ resource "aws_subnet" "public1" {
   tags = { Name = "public-subnet-1" }
 }
 
-# routtable setup
+# rout-table setup
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main.id
   route {
@@ -67,13 +67,13 @@ resource "aws_security_group" "flask_sg" {
   }
 }
 
-# EC2 
+# EC2 + user data
 resource "aws_instance" "flask_ec2" {
-  ami           = "ami-00ca32bbc84273381" # Amazon Linux 2 AMI (update per region)
+  ami           = "ami-00ca32bbc84273381" 
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public1.id
   vpc_security_group_ids = [aws_security_group.flask_sg.id]
-  key_name      = "my-keypair" # must exist in AWS
+  key_name      = "keypair1" 
 
   user_data = <<-EOF
               #!/bin/bash

@@ -18,48 +18,8 @@ The project is deployed using **Terraform** for Infrastructure-as-Code (IaC).
   * Upload input JSON files.
   * List available translated JSON results.
   * Download translations via presigned S3 URLs.
-* Infrastructure deployed using **Terraform**?.
-
----
-
-## Example Input JSON
-
-```json
-{
-  "source_lang": "en",
-  "target_langs": ["fr", "es", "de"],
-  "text_blocks": [
-    "Hello world",
-    "This is AWS Translate",
-    "Lambda makes serverless easy"
-  ]
-}
-```
-
-## Example Output JSON
-
-```json
-{
-  "source_lang": "en",
-  "translations": {
-    "fr": [
-      "Bonjour le monde",
-      "Ceci est AWS Translate",
-      "Lambda facilite le sans serveur"
-    ],
-    "es": [
-      "Hola mundo",
-      "Esto es AWS Translate",
-      "Lambda facilita el serverless"
-    ],
-    "de": [
-      "Hallo Welt",
-      "Dies ist AWS Translate",
-      "Lambda macht serverlos einfach"
-    ]
-  }
-}
-```
+* Infrastructure deployed using **Terraform**.
+--
 
 ---
 
@@ -71,7 +31,7 @@ The project is deployed using **Terraform** for Infrastructure-as-Code (IaC).
 ##  Technologies Used
 
 * **AWS Lambda** – JSON processing + translation
-* **Amazon S3** – Input/output storage
+* **Amazon S3** – Input/output storage (2 storage.)
 * **Amazon Translate** – Multilingual translation
 * **IAM** – Roles and security policies
 * **Flask (Python)** – Web UI for uploads/downloads
@@ -99,7 +59,6 @@ multiliingual-document-translation /
     └── lambda_function.py
 
 ```
-
 
 
 #### Terraform
@@ -132,8 +91,48 @@ aws s3 cp lambda.zip s3://<lambda-code-bucket>/
 4. Wait for translations to complete (Lambda triggers automatically).
 5. Download translated JSON files from the output list.
 
+
 ---
 
+## Example Input JSON
+
+```json
+{
+  "source_lang": "en",
+  "target_langs": ["fr", "es", "de"],
+  "text_blocks": [
+    "Hello world",
+    "This is AWS Translate",
+    "Lambda makes serverless easy"
+  ]
+}
+```
+---
+## Example Output JSON
+
+```json
+{
+  "source_lang": "en",
+  "translations": {
+    "fr": [
+      "Bonjour le monde",
+      "Ceci est AWS Translate",
+      "Lambda facilite le sans serveur"
+    ],
+    "es": [
+      "Hola mundo",
+      "Esto es AWS Translate",
+      "Lambda facilita el serverless"
+    ],
+    "de": [
+      "Hallo Welt",
+      "Dies ist AWS Translate",
+      "Lambda macht serverlos einfach"
+    ]
+  }
+}
+```
+---
 ##  Future Enhancements
 
 * Support additional input formats (CSV, TXT).
