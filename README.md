@@ -1,5 +1,5 @@
 
-# Multiliingual document translation 
+# Multi-lingual document translation 
 
 This project implements a **serverless multilingual translation pipeline** on AWS.
 It accepts **JSON documents** containing text blocks and language metadata, translates them into multiple target languages using **Amazon Translate**, and stores the translated results in Amazon S3.
@@ -48,20 +48,24 @@ Set the terminal to the project directory
 
 Directory structure
 ```
-multiliingual-document-translation /
+multilingual-document-translation /
 ├── terraform/
-│   └── 1-provider.tf
+│ └── 1-provider.tf
 │	└── 2-bucket.tf
 │	└── 3.lambda.tf
+|   └── 4.appserver.tf
 │	└── outputs.tf
 │	└── variable.tf
 └── lambda/
-    └── lambda_function.py
-
+|    └── lambda_function.py
+└── flask-app/
+      └── app.py
+      └── index.html
 ```
 
 
-#### Terraform
+
+### **1. Terraform**
 
 ```bash
 cd terraform
@@ -74,7 +78,7 @@ terraform apply
 ```bash
 cd lambda
 zip lambda.zip lambda_function.py
-aws s3 cp lambda.zip s3://<lambda-code-bucket>/
+#terraform copy the lambda.zip to the cloud.
 ```
 
 ---
@@ -84,7 +88,7 @@ aws s3 cp lambda.zip s3://<lambda-code-bucket>/
 1. Start the Flask app (if running on EC2, it auto-runs at startup):
 
    ```bash
-   python app.py
+   nohup python3 app.py &
    ```
 2. Open the UI → `http://<ec2-public-ip>:5000/`
 3. Upload a JSON file.
